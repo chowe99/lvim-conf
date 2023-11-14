@@ -72,18 +72,13 @@ lvim.plugins = {
   },
 }
 
-lvim.autocommands = {
-
-}
-vim.keymap.set('n', '<leader>/', function()
+lvim.keys.normal_mode['<leader>sf'] = require('telescope.builtin').find_files
+lvim.keys.normal_mode['<leader>sg'] = require('telescope.builtin').live_grep
+lvim.keys.normal_mode['<leader>e'] = vim.diagnostic.open_float
+lvim.keys.normal_mode['<leader>/'] = function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
-end, { desc = '[/] Fuzzily search in current buffer' })
-vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
-
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-
+end
