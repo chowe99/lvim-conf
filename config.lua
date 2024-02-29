@@ -82,3 +82,4 @@ lvim.keys.normal_mode['<leader>/'] = function()
     previewer = false,
   })
 end
+lvim.keys.normal_mode['<leader>rn'] = vim.lsp.buf.rename
