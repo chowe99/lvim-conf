@@ -74,6 +74,7 @@ lvim.plugins = {
 
 lvim.keys.normal_mode['<leader>sf'] = require('telescope.builtin').find_files
 lvim.keys.normal_mode['<leader>sg'] = require('telescope.builtin').live_grep
+lvim.builtin.which_key.mappings['e'] = {}
 lvim.keys.normal_mode['<leader>e'] = vim.diagnostic.open_float
 lvim.keys.normal_mode['<leader>/'] = function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
@@ -82,3 +83,4 @@ lvim.keys.normal_mode['<leader>/'] = function()
     previewer = false,
   })
 end
+lvim.keys.normal_mode['<C-t>'] = ":Neotree toggle<CR>"
