@@ -84,3 +84,4 @@ lvim.keys.normal_mode['<leader>/'] = function()
   })
 end
 lvim.keys.normal_mode['<C-t>'] = ":Neotree toggle<CR>"
+lvim.keys.normal_mode['<leader>rn'] = vim.lsp.buf.rename
