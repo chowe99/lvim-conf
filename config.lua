@@ -446,6 +446,7 @@ lvim.keys.normal_mode['<leader>sf'] = require('telescope.builtin').find_files
 lvim.keys.normal_mode['<leader>sg'] = require('telescope.builtin').live_grep
 lvim.keys.normal_mode['<C-t>'] = ":Neotree toggle<CR>"
 lvim.keys.normal_mode["x"] = '"_x'
+lvim.keys.visual_mode["d"] = '"_d'
 
 lvim.builtin.which_key.mappings['e'] = {}
 lvim.keys.normal_mode['<leader>e'] = vim.diagnostic.open_float
@@ -453,22 +454,14 @@ lvim.keys.normal_mode['<leader>e'] = vim.diagnostic.open_float
 -- Map ToggleTerm commands to open specific terminals
 lvim.builtin.which_key.mappings['t'] = { -- Removed <leader> since which_key already uses <leader>
   group = "terminals",
-  name = "Terminals and tabs",
-  desc = "Terminal and Tab commands",
+  name = "Terminals",
+  desc = "Terminal commands",
   ['1'] = { "<cmd>ToggleTerm 1<CR>", "Terminal 1" },
   ['2'] = { "<cmd>ToggleTerm 2<CR>", "Terminal 2" },
   ['3'] = { "<cmd>ToggleTerm 3<CR>", "Terminal 3" },
-  ['c'] = { "<cmd>tabclose<CR>", "Close current tab" },
 }
 
--- local wk = require("which-key")
--- wk.add({
---   { "<leader>t", group = "Terminals" },
---   { "<leader>t", group = "Terminals" },
--- })
-
 -- Mappings for vim-visual-multi
--- lvim.builtin.which_key.mappings['<C-a>'] = {}
 vim.g.VM_default_mappings = 0
 vim.g.VM_maps = {
   ["Select All"] = '<leader><C-a>',   -- Space + Ctrl + a
@@ -476,3 +469,15 @@ vim.g.VM_maps = {
   ["Add Cursor Down"] = '<C-M-Down>', -- Ctrl + alt + Down Arrow
   ["Add Cursor Up"] = '<C-M-Up>',     -- Ctrl + alt + Up Arrow
 }
+
+-- implement quickfix
+local opts = { noremap = true, silent = true }
+local function quickfix()
+  vim.lsp.buf.code_action({
+    filter = function(a) return a.isPreferred end,
+    apply = true
+  })
+end
+vim.keymap.set('n', '<leader>lq', quickfix, opts)
+
+lvim.keys.normal_mode['<leader>rn'] = vim.lsp.buf.rename
