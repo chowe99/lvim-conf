@@ -45,6 +45,9 @@ vim.opt.formatoptions:append({ "r" })
 -- Disable default NvimTree
 lvim.builtin.nvimtree.active = false
 
+-- Enable automatic installation of servers
+lvim.lsp.installer.setup.automatic_installation = true
+
 -- Language Servers
 lvim.lsp.installer.setup.ensure_installed = {
   "lua_ls",
@@ -52,7 +55,60 @@ lvim.lsp.installer.setup.ensure_installed = {
   "pyright",     -- Python
   "tailwindcss", -- Tailwind CSS
   "html",        -- HTML
+  "cssls",       -- CSS
+  "jsonls",      -- JSON
+  "yamlls",      -- YAML
+  "dockerls",    -- Dockerfile
+  "graphql",     -- GraphQL
+  "bashls",      -- Bash
   -- Add other servers if needed
+}
+
+-- Formatter setup
+local formatters = require "lvim.lsp.null-ls.formatters"
+formatters.setup {
+  -- For JavaScript/TypeScript
+  {
+    command = "prettierd",
+    filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact", "vue", "html", "css", "json", "yaml" },
+  },
+  -- For Python
+  {
+    command = "black",
+    filetypes = { "python" },
+  },
+  -- Add any other formatters you need
+  {
+    command = "stylelint",
+    filetypes = { "css", "scss", "sass", "less" },
+  },
+  {
+    command = "shfmt",
+    filetypes = { "sh", "bash" },
+  },
+}
+-- Linter setup
+local linters = require "lvim.lsp.null-ls.linters"
+linters.setup {
+  -- For JavaScript/TypeScript
+  {
+    command = "eslint_d",
+    filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact", "vue" },
+  },
+  -- For Python
+  {
+    command = "pylint",
+    filetypes = { "python" },
+  },
+  -- Add any other linters you need
+  {
+    command = "stylelint",
+    filetypes = { "css", "scss", "sass", "less" },
+  },
+  {
+    command = "shellcheck",
+    filetypes = { "sh", "bash" },
+  },
 }
 
 local lsp_manager = require("lvim.lsp.manager")
@@ -345,36 +401,6 @@ lvim.plugins = {
       -- table: groups you don't want to clear
       exclude_groups = {},
     }
-  },
-}
-
--- Formatter setup
-local formatters = require "lvim.lsp.null-ls.formatters"
-formatters.setup {
-  -- For JavaScript/TypeScript
-  {
-    command = "prettierd",
-    filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact", "vue", "html", "css", "json", "yaml" },
-  },
-  -- For Python
-  {
-    command = "black",
-    filetypes = { "python" },
-  },
-}
-
--- Linter setup
-local linters = require "lvim.lsp.null-ls.linters"
-linters.setup {
-  -- For JavaScript/TypeScript
-  {
-    command = "eslint_d",
-    filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact", "vue" },
-  },
-  -- For Python
-  {
-    command = "flake8",
-    filetypes = { "python" },
   },
 }
 
