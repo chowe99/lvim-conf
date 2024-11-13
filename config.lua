@@ -61,6 +61,8 @@ lvim.lsp.installer.setup.ensure_installed = {
   "dockerls",    -- Dockerfile
   "graphql",     -- GraphQL
   "bashls",      -- Bash
+  "eslint",
+  "emmet_ls",
   -- Add other servers if needed
 }
 
@@ -95,6 +97,7 @@ linters.setup {
     command = "eslint_d",
     filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact", "vue" },
   },
+
   -- For Python
   {
     command = "pylint",
@@ -169,6 +172,7 @@ lspconfig.tsserver.setup {
     client.server_capabilities.documentFormattingProvider = false
     require('lvim.lsp').common_on_attach(client, bufnr)
   end,
+  filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
   settings = {
     typescript = {
       jsx = true,
@@ -182,6 +186,19 @@ lspconfig.tsserver.setup {
 lspconfig.pyright.setup {
   on_attach = require('lvim.lsp').common_on_attach,
 }
+
+lspconfig.emmet_ls.setup {
+  filetypes = { "html", "css", "javascript", "javascriptreact", "typescriptreact" },
+  init_options = {
+    html = {
+      options = {
+        -- For JSX compatibility
+        ["jsx.enabled"] = true,
+      },
+    },
+  },
+}
+
 
 -- Plugins Configuration
 lvim.plugins = {
