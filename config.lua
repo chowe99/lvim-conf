@@ -6,6 +6,7 @@
 
 -- General Vim Settings
 vim.g.mapleader = " "
+vim.g.python3_host_prog = vim.env.HOME .. "/.pyenv/versions/3.11.6/bin/python"
 
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
@@ -398,7 +399,17 @@ lvim.plugins = {
 
   {
     "github/copilot.vim",
+    config = function()
+      vim.g.copilot_no_tab_map = true
+
+      -- Accept the current suggestion with <Right>
+      vim.api.nvim_set_keymap("i", "<Right>", 'copilot#Accept("<CR>")', { expr = true, silent = true })
+
+      -- Cycle to the next suggestion with <Left>
+      vim.api.nvim_set_keymap("i", "<Left>", 'copilot#Next()', { expr = true, silent = true })
+    end,
   },
+
   {
     "akinsho/toggleterm.nvim",
     version = "*",
@@ -539,7 +550,7 @@ lvim.plugins = {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- Optional, for icons
       "MunifTanjim/nui.nvim",
-      { "edluffy/hologram.nvim" }, -- Add hologram.nvim as a dependency
+      { "edluffy/hologram.nvim" },   -- Add hologram.nvim as a dependency
     },
     config = function()
       require("neo-tree").setup({
@@ -547,7 +558,7 @@ lvim.plugins = {
         filesystem = {
           window = {
             position = "right", -- Neo-tree on the right side
-            width = 25, -- Set the width of the Neo-tree window
+            width = 25,         -- Set the width of the Neo-tree window
             mapping_options = {
               noremap = true,
               nowait = true,
@@ -566,9 +577,9 @@ lvim.plugins = {
                 }
                 -- Create a floating window for image preview
                 local buf = vim.api.nvim_create_buf(false, true) -- Create a scratch buffer
-                local width = vim.o.columns * 0.5 -- Adjust width to 50% of the screen
-                local height = vim.o.lines * 0.5 -- Adjust height to 50% of the screen
-                vim.api.nvim_open_win(buf, true, { -- Open the floating window
+                local width = vim.o.columns * 0.5                -- Adjust width to 50% of the screen
+                local height = vim.o.lines * 0.5                 -- Adjust height to 50% of the screen
+                vim.api.nvim_open_win(buf, true, {               -- Open the floating window
                   relative = "editor",
                   width = math.floor(width),
                   height = math.floor(height),
