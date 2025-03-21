@@ -6,7 +6,7 @@
 
 -- General Vim Settings
 vim.g.mapleader = " "
-vim.g.python3_host_prog = vim.env.HOME .. "/.pyenv/versions/3.11.6/bin/python"
+vim.g.python3_host_prog = "~/.pyenv/shims/python"
 
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
@@ -188,6 +188,16 @@ lspconfig.pyright.setup {
   on_attach = require('lvim.lsp').common_on_attach,
 }
 
+-- configure mason/null-ls to use pyenv's pylint
+local linters = require("lvim.lsp.null-ls.linters")
+linters.setup {
+  {
+    command = "pylint", -- use the builtin name
+    filetypes = { "python" },
+  },
+}
+
+
 lspconfig.emmet_ls.setup {
   filetypes = { "html", "css", "javascript", "javascriptreact", "typescriptreact" },
   init_options = {
@@ -218,15 +228,15 @@ lvim.plugins = {
   --     }
   --   end,
   -- },
-  {
-    "edluffy/hologram.nvim",
-    event = "VeryLazy",
-    config = function()
-      require('hologram').setup {
-        auto_display = true, -- Automatically display images in markdown files
-      }
-    end,
-  },
+  -- {
+  --   "edluffy/hologram.nvim",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require('hologram').setup {
+  --       auto_display = true, -- Automatically display images in markdown files
+  --     }
+  --   end,
+  -- },
   {
     "mg979/vim-visual-multi",
     branch = "master",
@@ -288,7 +298,7 @@ lvim.plugins = {
         diff = {
           ours = 'co',
           theirs = 'ct',
-          all_theirs = 'ca',
+          all_theirs = '<C-a>',
           both = 'cb',
           cursor = 'cc',
           next = ']x',
@@ -489,6 +499,15 @@ lvim.plugins = {
         lsp_doc_border = true,
       }
 
+      opts.views = {
+        popup = {
+          relative = "editor",
+          position = { row = "50%", col = "50%" },
+          size = { height = 5, width = 50 }, -- small initial size
+          enter = false,                     -- don’t switch focus immediately
+        },
+      }
+
       return opts
     end,
   },
@@ -496,9 +515,10 @@ lvim.plugins = {
   {
     "rcarriga/nvim-notify",
     opts = {
-      timeout = 5000,
+      timeout = 6000,
       background_colour = "#000000",
       render = "wrapped-compact",
+      max_visible = 1,
     },
   },
   -- buffer line
