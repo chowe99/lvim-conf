@@ -704,14 +704,14 @@ lvim.builtin.treesitter.ensure_installed = {
 }
 
 lvim.builtin.treesitter.highlight.enable = true
+lvim.builtin.treesitter.highlight.disable = { "csv" }
+lvim.builtin.treesitter.ignore_install = { "csv" }
 
 -- Additional Treesitter configurations
 require('nvim-treesitter.configs').setup {
   ensure_installed = lvim.builtin.treesitter.ensure_installed,
-  ignore_install = { "csv" },
   highlight = {
     enable = lvim.builtin.treesitter.highlight.enable,
-    disable = { "csv" },
   },
   autotag = {
     enable = true,
