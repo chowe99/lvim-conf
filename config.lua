@@ -4,6 +4,7 @@
 -- Forum: https://www.reddit.com/r/lunarvim/
 -- Discord: https://discord.com/invite/Xb9B4Ny
 
+
 -- General Vim Settings
 vim.g.mapleader = " "
 vim.g.python3_host_prog = "~/.pyenv/shims/python"
@@ -189,15 +190,6 @@ lspconfig.pyright.setup {
   on_attach = require('lvim.lsp').common_on_attach,
 }
 
--- configure mason/null-ls to use pyenv's pylint
-local linters = require("lvim.lsp.null-ls.linters")
-linters.setup {
-  {
-    command = "pylint", -- use the builtin name
-    filetypes = { "python" },
-  },
-}
-
 
 lspconfig.emmet_ls.setup {
   filetypes = { "html", "css", "javascript", "javascriptreact", "typescriptreact" },
@@ -210,7 +202,6 @@ lspconfig.emmet_ls.setup {
     },
   },
 }
-
 
 -- Plugins Configuration
 lvim.plugins = {
@@ -488,7 +479,15 @@ lvim.plugins = {
       require('nvim-ts-autotag').setup {}
     end,
   },
+  {
+    "rcarriga/nvim-notify",
+    opts = function()
+      return {
+        background_colour = "#000000",
+      }
+    end,
 
+  },
   -- messages, cmdline and the popupmenu
   {
     "folke/noice.nvim",
@@ -496,6 +495,7 @@ lvim.plugins = {
       local opts = {}
       opts.routes = {}
 
+      -- Skip "No information available" notifications
       table.insert(opts.routes, {
         filter = {
           event = "notify",
@@ -504,26 +504,28 @@ lvim.plugins = {
         opts = { skip = true },
       })
 
+      -- If not focused, use a desktop notification view
       local focused = true
       vim.api.nvim_create_autocmd("FocusGained", {
-        callback = function()
-          focused = true
-        end,
+        callback = function() focused = true end,
       })
       vim.api.nvim_create_autocmd("FocusLost", {
-        callback = function()
-          focused = false
-        end,
+        callback = function() focused = false end,
       })
 
       table.insert(opts.routes, 1, {
         filter = {
-          cond = function()
-            return not focused
-          end,
+          cond = function() return not focused end,
         },
         view = "notify_send",
         opts = { stop = false },
+      })
+
+      -- *** NEW ROUTE: All msg_show events are routed as notify popups ***
+      table.insert(opts.routes, 1, {
+        filter = { event = "msg_show" },
+        view = "notify",
+        opts = { timeout = 1000, replace = true },
       })
 
       opts.commands = {
@@ -534,6 +536,11 @@ lvim.plugins = {
         },
       }
 
+      opts.notify = {
+        enabled = true,
+        view = "notify",
+      }
+
       opts.presets = {
         lsp_doc_border = true,
       }
@@ -542,24 +549,22 @@ lvim.plugins = {
         popup = {
           relative = "editor",
           position = { row = "50%", col = "50%" },
-          size = { height = 5, width = 50 }, -- small initial size
-          enter = false,                     -- don’t switch focus immediately
+          size = { height = 5, width = 50 },
+          enter = false,
+        },
+        -- Custom notify view using nvim-notify's backend
+        notify = {
+          backend = "notify",
+          timeout = 1000,
+          background_colour = "#000000",
+          render = "compact",
+          max_visible = 1,
         },
       }
-
       return opts
     end,
   },
 
-  {
-    "rcarriga/nvim-notify",
-    opts = {
-      timeout = 6000,
-      background_colour = "#000000",
-      render = "wrapped-compact",
-      max_visible = 1,
-    },
-  },
   -- buffer line
   {
     "akinsho/bufferline.nvim",
@@ -775,7 +780,19 @@ lvim.keys.normal_mode["x"] = '"_x'
 lvim.keys.visual_mode["d"] = '"_d'
 
 lvim.builtin.which_key.mappings['e'] = {}
-lvim.keys.normal_mode['<leader>e'] = vim.diagnostic.open_float
+-- Error mappings in normal mode
+lvim.keys.normal_mode["<leader>ee"] = vim.diagnostic.open_float
+lvim.keys.normal_mode["<leader>ed"] = "<cmd>Telescope diagnostics<CR>"
+-- Mapping for Noice all on <leader>eh
+lvim.keys.normal_mode["<leader>eh"] = "<cmd>Noice all<CR>"
+
+-- which_key group for error/diagnostic related commands under <leader>e
+lvim.builtin.which_key.mappings["e"] = {
+  name = "Diagnostics",
+  e = { "<cmd>lua vim.diagnostic.open_float()<CR>", "Open Error Float" },
+  d = { "<cmd>Telescope diagnostics<CR>", "Error Diagnostics" },
+  h = { "<cmd>Noice all<CR>", "Noice All" },
+}
 
 -- Map ToggleTerm commands to open specific terminals
 lvim.builtin.which_key.mappings['t'] = { -- Removed <leader> since which_key already uses <leader>
