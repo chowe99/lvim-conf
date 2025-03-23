@@ -64,6 +64,7 @@ lvim.lsp.installer.setup.ensure_installed = {
   "bashls",      -- Bash
   "eslint",
   "emmet_ls",
+  "clangd", -- C/C++
   -- Add other servers if needed
 }
 
@@ -239,7 +240,6 @@ lvim.plugins = {
   -- },
   {
     'cameron-wags/rainbow_csv.nvim',
-    config = true,
     ft = {
       'csv',
       'tsv',
@@ -254,7 +254,27 @@ lvim.plugins = {
       'RainbowDelimSimple',
       'RainbowDelimQuoted',
       'RainbowMultiDelim'
-    }
+    },
+    config = function()
+      -- Load the plugin
+      require("rainbow_csv").setup()
+
+      -- Auto-align CSV files on BufWinEnter
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        pattern = {
+          "*.csv",
+          "*.tsv",
+          "*.csv_semicolon",
+          "*.csv_whitespace",
+          "*.csv_pipe",
+          "*.rfc_csv",
+          "*.rfc_semicolon"
+        },
+        callback = function()
+          vim.cmd("RainbowAlign")
+        end,
+      })
+    end,
   },
   {
     "mg979/vim-visual-multi",
