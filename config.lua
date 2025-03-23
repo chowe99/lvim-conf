@@ -238,6 +238,25 @@ lvim.plugins = {
   --   end,
   -- },
   {
+    'cameron-wags/rainbow_csv.nvim',
+    config = true,
+    ft = {
+      'csv',
+      'tsv',
+      'csv_semicolon',
+      'csv_whitespace',
+      'csv_pipe',
+      'rfc_csv',
+      'rfc_semicolon'
+    },
+    cmd = {
+      'RainbowDelim',
+      'RainbowDelimSimple',
+      'RainbowDelimQuoted',
+      'RainbowMultiDelim'
+    }
+  },
+  {
     "mg979/vim-visual-multi",
     branch = "master",
     event = "BufRead",
@@ -689,8 +708,10 @@ lvim.builtin.treesitter.highlight.enable = true
 -- Additional Treesitter configurations
 require('nvim-treesitter.configs').setup {
   ensure_installed = lvim.builtin.treesitter.ensure_installed,
+  ignore_install = { "csv" },
   highlight = {
     enable = lvim.builtin.treesitter.highlight.enable,
+    disable = { "csv" },
   },
   autotag = {
     enable = true,
