@@ -286,14 +286,31 @@ lvim.plugins = {
       --   endpoint = "http://127.0.0.1:11434",         -- Note that there is no /v1 at the end.
       --   model = "qwen2.5-coder:32b-instruct-q4_K_M", -- change to your desired model if necessary
       -- },
-      provider = "claude",
-      claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
+      -- provider = "claude",
+      -- claude = {
+      --   endpoint = "https://api.anthropic.com",
+      --   model = "claude-3-5-sonnet-20241022",
+      --   temperature = 0,
+      --   max_tokens = 8000,
+      --   timeout = 30000, -- Timeout in milliseconds
+      -- },
+      -- provider = "openai",
+      -- openai = {
+      --   endpoint = "https://api.openai.com/v1",
+      --   model = "o3-mini",
+      --   temperature = 0,
+      --   max_tokens = 8000,
+      --   timeout = 30000, -- Timeout in milliseconds
+      --   disable_tools = true,
+      -- },
+      provider = "gemini",
+      gemini = {
+        model = "gemini-2.0-flash", -- or "gemini-pro-vision" if you need image capabilities
         temperature = 0,
         max_tokens = 8000,
         timeout = 30000, -- Timeout in milliseconds
       },
+
       behaviour = {
         auto_suggestions = false, -- Experimental stage
         auto_set_highlight_group = true,
