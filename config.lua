@@ -205,6 +205,7 @@ lspconfig.emmet_ls.setup {
 
 -- Plugins Configuration
 lvim.plugins = {
+  { "mbbill/undotree" },
   -- {
   --   "tpope/vim-fugitive",
   --   cmd = { "Git", "G" },
@@ -798,3 +799,17 @@ end
 vim.keymap.set('n', '<leader>lq', quickfix, opts)
 
 lvim.keys.normal_mode['<leader>rn'] = vim.lsp.buf.rename
+lvim.keys.normal_mode["<leader>u"] = function()
+  vim.cmd.UndotreeToggle()
+  vim.cmd.UndotreeFocus()
+end
+lvim.builtin.which_key.mappings['u'] = { -- Removed <leader> since which_key already uses <leader>
+  name = "UndoTree",
+  u = {
+    function()
+      vim.cmd.UndotreeToggle()
+      vim.cmd.UndotreeFocus()
+    end,
+    "Toggle & Focus UndoTree"
+  },
+}
