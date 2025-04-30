@@ -794,6 +794,13 @@ lvim.builtin.which_key.mappings['t'] = { -- Removed <leader> since which_key alr
   ['1'] = { "<cmd>ToggleTerm 1<CR>", "Terminal 1" },
   ['2'] = { "<cmd>ToggleTerm 2<CR>", "Terminal 2" },
   ['3'] = { "<cmd>ToggleTerm 3<CR>", "Terminal 3" },
+  ['4'] = { "<cmd>ToggleTerm 4<CR>", "Terminal 4" },
+  ['5'] = { "<cmd>ToggleTerm 5<CR>", "Terminal 5" },
+  ['6'] = { "<cmd>ToggleTerm 6<CR>", "Terminal 6" },
+  ['7'] = { "<cmd>ToggleTerm 7<CR>", "Terminal 7" },
+  ['8'] = { "<cmd>ToggleTerm 8<CR>", "Terminal 8" },
+  ['9'] = { "<cmd>ToggleTerm 9<CR>", "Terminal 9" },
+  ['0'] = { "<cmd>ToggleTerm 10<CR>", "Terminal 10" },
 }
 
 -- Mappings for vim-visual-multi
