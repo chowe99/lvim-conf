@@ -305,9 +305,10 @@ lvim.plugins = {
       -- },
       provider = "gemini",
       gemini = {
-        model = "gemini-2.0-flash", -- or "gemini-pro-vision" if you need image capabilities
+        model = "gemini-2.5-pro-exp-03-25", -- or "gemini-pro-vision" if you need image capabilities
         temperature = 0,
         max_tokens = 8000,
+        disable_tools = true,
         timeout = 30000, -- Timeout in milliseconds
       },
 
