@@ -230,6 +230,7 @@ lvim.plugins = {
   --     }
   --   end,
   -- },
+  { "nvim-pack/nvim-spectre" }, -- Needs gnu-sed on MacOS (brew install gnu-sed)
   {
     'cameron-wags/rainbow_csv.nvim',
     ft = {
@@ -725,6 +726,60 @@ lvim.builtin.treesitter.highlight.enable = true
 lvim.builtin.treesitter.highlight.disable = { "csv" }
 lvim.builtin.treesitter.ignore_install = { "csv" }
 
+-- Treesitter folding setup
+vim.o.foldmethod = "expr"
+vim.o.foldexpr = "nvim_treesitter#foldexpr()"
+vim.o.foldenable = true
+vim.o.foldlevel = 0
+vim.o.foldlevelstart = 0
+
+-- Autocmd to fold all on open
+vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
+  pattern = "*",
+  callback = function()
+    if not vim.b.folds_initialized then
+      vim.cmd("normal! zM") -- Collapse all folds (just once)
+      vim.b.folds_initialized = true
+    end
+  end
+})
+
+-- Toggle all folds (zM / zR)
+function ToggleAllFolds()
+  if vim.b.folds_collapsed == nil then
+    vim.b.folds_collapsed = true
+  end
+  if vim.b.folds_collapsed then
+    vim.cmd("normal! zR") -- Open all
+  else
+    vim.cmd("normal! zM") -- Collapse all
+  end
+  vim.b.folds_collapsed = not vim.b.folds_collapsed
+end
+
+-- Toggle current fold open/closed
+function ToggleCurrentFold()
+  local line = vim.fn.line(".")
+  if vim.fn.foldclosed(line) == -1 then
+    vim.cmd("normal! zc") -- Collapse
+  else
+    vim.cmd("normal! zo") -- Expand
+  end
+end
+
+-- Key mappings
+vim.keymap.set("n", "<leader>oa", ToggleAllFolds, { desc = "Toggle All Folds" })
+vim.keymap.set("n", "<leader>oo", ToggleCurrentFold, { desc = "Toggle Current Fold" })
+
+-- which-key bindings
+lvim.builtin.which_key.mappings["o"] = {
+  name = "Folds",
+  a = { "<cmd>lua ToggleAllFolds()<CR>", "Toggle All Folds" },
+  o = { "<cmd>lua ToggleCurrentFold()<CR>", "Toggle Current Fold" },
+}
+
+
+
 -- Additional Treesitter configurations
 require('nvim-treesitter.configs').setup {
   ensure_installed = lvim.builtin.treesitter.ensure_installed,
@@ -812,6 +867,15 @@ vim.g.VM_maps = {
   ["Add Cursor Down"] = '<C-M-Down>', -- Ctrl + alt + Down Arrow
   ["Add Cursor Up"] = '<C-M-Up>',     -- Ctrl + alt + Up Arrow
 }
+
+-- Mappings for Spectre
+lvim.builtin.which_key.mappings["S"] = {
+  name = "+Spectre",
+  S = { "<cmd>lua require('spectre').toggle()<CR>", "Toggle Spectre" },
+  w = { "<cmd>lua require('spectre').open_visual({select_word=true})<CR>", "Search Word" },
+  p = { "<cmd>lua require('spectre').open_file_search({select_word=true})<CR>", "Search in File" },
+}
+
 
 -- implement quickfix
 local opts = { noremap = true, silent = true }
