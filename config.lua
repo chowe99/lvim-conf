@@ -300,16 +300,17 @@ lvim.plugins = {
       --   endpoint = "https://api.openai.com/v1",
       --   model = "o3-mini",
       --   temperature = 0,
-      --   max_tokens = 8000,
+      --   -- max_tokens = 8000,
       --   timeout = 30000, -- Timeout in milliseconds
-      --   disable_tools = true,
+      --   -- disable_tools = true,
       -- },
       provider = "gemini",
       gemini = {
-        model = "gemini-2.5-pro-exp-03-25", -- or "gemini-pro-vision" if you need image capabilities
+        -- model = "gemini-2.5-pro-exp-03-25", -- or "gemini-pro-vision" if you need image capabilities
+        model = "gemini-2.5-flash-preview-04-17",
         temperature = 0,
-        max_tokens = 8000,
-        disable_tools = true,
+        -- max_tokens = 8000,
+        -- disable_tools = true,
         timeout = 30000, -- Timeout in milliseconds
       },
 
@@ -729,20 +730,21 @@ lvim.builtin.treesitter.ignore_install = { "csv" }
 -- Treesitter folding setup
 vim.o.foldmethod = "expr"
 vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-vim.o.foldenable = true
+vim.o.foldenable = false
 vim.o.foldlevel = 0
 vim.o.foldlevelstart = 0
 
 -- Autocmd to fold all on open
-vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
-  pattern = "*",
-  callback = function()
-    if not vim.b.folds_initialized then
-      vim.cmd("normal! zM") -- Collapse all folds (just once)
-      vim.b.folds_initialized = true
-    end
-  end
-})
+-- vim.api.nvim_create_autocmd({ "BufReadPost", "FileReadPost" }, {
+--   pattern = "*",
+--   callback = function()
+--     if not vim.b.folds_initialized then
+--       vim.cmd("normal! zM") -- Collapse all folds (just once)
+--       vim.b.folds_initialized = true
+--     end
+--   end
+-- })
+--
 
 -- Toggle all folds (zM / zR)
 function ToggleAllFolds()
